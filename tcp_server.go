@@ -17,19 +17,25 @@ type server struct {
 	address                  string // Address to open connection: localhost:9999
 	onNewClientCallback      func(c *Client)
 	onClientConnectionClosed func(c *Client, err error)
-	onNewMessage             func(c *Client, message string)
+	onNewMessage             func(c *Client, message []byte)
 }
 
 // Read client data from channel
 func (c *Client) listen() {
 	reader := bufio.NewReader(c.conn)
+	buf := make([]byte, 2024)
 	for {
-		message, err := reader.ReadString('\n')
+		nbyte, err := reader.Read(buf)
 		if err != nil {
 			c.conn.Close()
 			c.Server.onClientConnectionClosed(c, err)
 			return
 		}
+
+		// Copy and pass only what is read from the conn instead of entire buffer
+		message := make([]byte, nbyte)
+		copy(message, buf[:nbyte])
+
 		c.Server.onNewMessage(c, message)
 	}
 }
@@ -65,7 +71,7 @@ func (s *server) OnClientConnectionClosed(callback func(c *Client, err error)) {
 }
 
 // Called when Client receives new message
-func (s *server) OnNewMessage(callback func(c *Client, message string)) {
+func (s *server) OnNewMessage(callback func(c *Client, message []byte)) {
 	s.onNewMessage = callback
 }
 
@@ -96,7 +102,7 @@ func New(address string) *server {
 	}
 
 	server.OnNewClient(func(c *Client) {})
-	server.OnNewMessage(func(c *Client, message string) {})
+	server.OnNewMessage(func(c *Client, message []byte) {})
 	server.OnClientConnectionClosed(func(c *Client, err error) {})
 
 	return server
