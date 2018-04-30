@@ -40,22 +40,25 @@ func (c *Client) listen() {
 	}
 }
 
-// Send text message to client
+// Send sends a string message to client
 func (c *Client) Send(message string) error {
 	_, err := c.conn.Write([]byte(message))
 	return err
 }
 
-// Send bytes to client
+// SendBytes sends a byte array to client
 func (c *Client) SendBytes(b []byte) error {
 	_, err := c.conn.Write(b)
 	return err
 }
 
+
+// Conn returns the connection from the client struct
 func (c *Client) Conn() net.Conn {
 	return c.conn
 }
 
+// Close closes the connection
 func (c *Client) Close() error {
 	return c.conn.Close()
 }
@@ -75,7 +78,7 @@ func (s *server) OnNewMessage(callback func(c *Client, message []byte)) {
 	s.onNewMessage = callback
 }
 
-// Start network server
+// Listen opens the tcp server to accept new connections
 func (s *server) Listen() {
 	listener, err := net.Listen("tcp", s.address)
 	if err != nil {
@@ -94,7 +97,7 @@ func (s *server) Listen() {
 	}
 }
 
-// Creates new tcp server instance
+// New creates a new tcp server instance on specified address
 func New(address string) *server {
 	log.Println("Creating server with address", address)
 	server := &server{

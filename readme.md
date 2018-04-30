@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/firstrow/tcp_server.svg?branch=master)](https://travis-ci.org/firstrow/tcp_server)
+[![Go Report Card](https://goreportcard.com/badge/github.com/thijsnederlof/tcp_server)](https://goreportcard.com/report/github.com/thijsnederlof/tcp_server)
 
 # TCPServer
 Fork of github.com/firstrow/tcp_server, but instead of receiving strings it uses byte arrays. 
@@ -6,7 +6,7 @@ Fork of github.com/firstrow/tcp_server, but instead of receiving strings it uses
 ### Install package
 
 ``` bash
-go get -u github.com/ThijsNederlof/tcp_server
+go get -u github.com/thijsnederlof/tcp_server
 ```
 
 ### Usage:
@@ -17,7 +17,7 @@ NOTICE: This library does not use any delimiter to separate received messages. Y
 ``` go
 package main
 
-import "github.com/ThijsNederlof/tcp_server"
+import "github.com/thijsnederlof/tcp_server"
 
 func main() {
 	server := tcp_server.New("localhost:9999")
