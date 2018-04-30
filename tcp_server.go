@@ -52,7 +52,6 @@ func (c *Client) SendBytes(b []byte) error {
 	return err
 }
 
-
 // Conn returns the connection from the client struct
 func (c *Client) Conn() net.Conn {
 	return c.conn
